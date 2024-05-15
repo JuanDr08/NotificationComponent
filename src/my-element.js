@@ -1,7 +1,15 @@
 import { LitElement, html, css } from "lit";
 class Ntfy extends LitElement {
+    static properties = {
+        back: { type: String }
+    }
     constructor() {
         super();
+        this.back = 'https://i.scdn.co/image/ab6761610000f178318961954ebb114c9d79792e'
+        this.artistIds = ['3tW7oxLDm9fGjPYCFnqnBY', '53XhwfbYqKCa1cC15pYq2q', '4gzpq5DPGxSnKTe4SA8HAU']
+        this.actual = '3tW7oxLDm9fGjPYCFnqnBY'
+        this.title = ""
+        this.autor = ""
     }
     static styles = css`
         *{
@@ -20,7 +28,6 @@ class Ntfy extends LitElement {
             border-radius: 20px;
             padding: 3px 0px;
             position: relative;
-            z-index: -100;
         }
         .separators {
             display: flex;
@@ -32,10 +39,11 @@ class Ntfy extends LitElement {
             height: 65%;
         }
         .img__container img {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             box-sizing: border-box;
-            filter: drop-shadow(0px 0px 10px #ffffff19)
+            filter: drop-shadow(0px 0px 10px #ffffff19);
+            border-radius: 15px;
         }
         .img__container > i {
             height: max-content;
@@ -72,7 +80,11 @@ class Ntfy extends LitElement {
             width: 100%;
             height: 100%;
         }
-        .controlers > i {
+        .controlers > button:nth-child(2) {
+            background: none;
+            border: none;
+        }
+        .controlers > button:nth-child(2) > i {
             font-size: 1.3rem;
             font-weight: 500;
             cursor: pointer;
@@ -85,28 +97,33 @@ class Ntfy extends LitElement {
             position: relative;
         }
         .prev > i:first-child {
-            transform: translateX(8px);
+            transform: translateX(12px);
             z-index: -1;
         }
         .next > i:last-child {
-            transform: translateX(-8px);
+            transform: translateX(-12px);
             z-index: -1;
         }
-        .prev, .next{
+        .prev, .next {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .prev > i , .next > i{
             font-size: 1.1rem;
-            display: flex;
-            align-items: center;
+            background: none;
+            border: none;
             color: #27ae60;
         }
         
-    `
+    `;
     render() {
         return html`
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>    
     <div class="container">
         <div class="separators img__container">
         <i class='bx bx-chevron-left' ></i>
-            <img src="./src/assets/image20.png">
+            <img src=${this.back}>
         </div>
         <div class="separators">
             <div class="text">
@@ -114,19 +131,49 @@ class Ntfy extends LitElement {
                 <p>1000 gecks</p>
             </div>
             <div class="controlers">
-                <div class="prev">
+                <button class="prev" @click="${this._prev}">
                     <i class='bx bxs-left-arrow' ></i>
                     <i class='bx bxs-left-arrow' ></i>
-                </div>
-                <i class='bx bxs-right-arrow'></i>
-                <div class="next">
+                </button>
+                <button><i class='bx bxs-right-arrow'></i></button>
+                <button class="next" @click="${this._next}">
                     <i class='bx bxs-right-arrow'></i>
                     <i class='bx bxs-right-arrow'></i>
-                </div>
+                </button>
             </div>
         </div>
     </div>
     `;
+    }
+    async _next() {
+        for (let val in this.artistIds) {
+            if (this.artistIds[val] == this.actual) {
+                console.log(this.actual);
+                if(val == this.artistIds.length - 1){
+                    this.actual = this.artistIds[this.artistIds.length - this.artistIds.length]
+                }else {
+                    this.actual = this.artistIds[Number(val) + 1]
+                }
+                console.log(this.actual);
+                break
+            };
+        }
+        // this.requestUpdate()
+    }
+    async _prev() {
+        for (let val in this.artistIds) {
+            if (this.artistIds[val] == this.actual) {
+                console.log(this.actual);
+                if(val == 0){
+                    this.actual = this.artistIds[this.artistIds.length - 1]
+                }else {
+                    this.actual = this.artistIds[Number(val) - 1]
+                }
+                console.log(this.actual);
+                break
+            };
+        }
+        // this.requestUpdate()
     }
 }
 customElements.define("my-notification", Ntfy)
