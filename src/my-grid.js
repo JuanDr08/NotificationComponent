@@ -24,6 +24,7 @@ class myGrid extends LitElement {
         margin: none;
         padding: none;
         box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
 
     }
 
